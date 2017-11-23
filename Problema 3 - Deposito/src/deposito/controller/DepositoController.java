@@ -18,16 +18,17 @@ public class DepositoController {
     private InetAddress grupo;
     private MulticastSocket socket;
     private String ip;
-    private int porta;
+    private int porta, portaDeposito;
     private DatagramSocket s;
     private InetAddress group;
     private byte[] buf;
     private LinkedList produtos;
     private String login;
     
-    public DepositoController(String ip, int porta) throws IOException{
+    public DepositoController(String ip, int porta, int portaDeposito) throws IOException{
         this.ip = ip;
         this.porta = porta;
+        this.portaDeposito = portaDeposito;
         produtos = new LinkedList();
         grupo = InetAddress.getByName(ip);
         socket = new MulticastSocket(porta);
@@ -36,7 +37,7 @@ public class DepositoController {
     }
     
     public void loginDeposito() throws SocketException, UnknownHostException, IOException{
-        String output = "D#L#";
+        String output = "D#L#" + InetAddress.getLocalHost().getHostAddress() + "#" + portaDeposito + "#";
         s = new DatagramSocket();
         group = InetAddress.getByName(ip);
         buf = output.getBytes();
