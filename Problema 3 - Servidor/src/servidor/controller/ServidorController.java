@@ -22,8 +22,8 @@ public class ServidorController {
     private String ipMulticast, ipBalanceador;
     private int portaMulticast, portaBalanceador, portaLoja;
     private boolean conectado;
-    private MulticastSocket socket = null;
-    private byte[] buf = new byte[256];
+    private MulticastSocket socket;
+    private byte[] buf;
     private LinkedList depositos;
     private Socket socketBalanceador;
     private ObjectOutputStream outserver;
@@ -39,9 +39,11 @@ public class ServidorController {
         this.conectado = false;
         depositos = new LinkedList();
         this.portaLoja = portaLoja;
+        this.socket = null;
         socketBalanceador = new Socket(ipBalanceador, portaBalanceador);
         outserver = new ObjectOutputStream(socketBalanceador.getOutputStream()); 
         inserver = new ObjectInputStream(socketBalanceador.getInputStream());
+        this.buf = new byte[256];
     }
     
     public void conexaoMulticast(int porta) throws IOException{
@@ -55,8 +57,8 @@ public class ServidorController {
             String received = new String(
               packet.getData(), 0, packet.getLength());
             System.out.println(received);
-            if ("end".equals(received)) {
-                break;
+            if(received.startsWith("D")){
+                LojaThread thread = new LojaThread(this, socket, received);
             }
         }
     }
@@ -73,9 +75,10 @@ public class ServidorController {
         }
     }
     
-    public void adicionaDeposito(LinkedList produtos, int x, int y){
-        Deposito deposito = new Deposito(produtos, x, y);
+    public int loginDeposito(int x, int y){
+        Deposito deposito = new Deposito(x, y);
         depositos.add(deposito);
+        return deposito.getId();
     }
     
     public void adicionaProdutoDeposito(Produto produto, int x, int y){

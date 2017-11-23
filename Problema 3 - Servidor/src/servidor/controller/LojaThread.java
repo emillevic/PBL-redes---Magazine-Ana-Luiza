@@ -8,6 +8,10 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.net.DatagramPacket;
+import java.net.DatagramSocket;
+import java.net.InetAddress;
+import java.net.MulticastSocket;
 import java.net.Socket;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -17,14 +21,17 @@ public class LojaThread implements Runnable{
     private ObjectOutputStream outloja;
     private ObjectInputStream inloja;
     String recebe;
-    Socket socket;
+    MulticastSocket socket;
+    private byte[] bufrecebe, bufenvia;
+    
 
-    public LojaThread(ServidorController controlador, Socket socket, ObjectOutputStream outloja, ObjectInputStream inloja, String recebe) throws IOException{
+    public LojaThread(ServidorController controlador, MulticastSocket socket, String recebe) throws IOException{
         this.controlador = controlador;
         this.socket = socket;
         this.outloja = outloja;
         this.inloja = inloja;
         this.recebe = recebe;
+        bufrecebe = new byte[256];
     }
     @Override
     public void run() {
@@ -40,6 +47,16 @@ public class LojaThread implements Runnable{
                 case "C":
                     break;
             }
+            DatagramPacket packet = new DatagramPacket(bufrecebe, bufrecebe.length);
+            try {
+                socket.receive(packet);
+            } catch (IOException ex) {
+                Logger.getLogger(LojaThread.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            String received = new String(
+              packet.getData(), 0, packet.getLength());
+            System.out.println(received);
+            recebe = received;
         }
     }
     

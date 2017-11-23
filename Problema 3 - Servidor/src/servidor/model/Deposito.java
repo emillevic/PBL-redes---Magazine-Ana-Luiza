@@ -4,15 +4,26 @@ package servidor.model;
 import java.util.LinkedList;
 
 public class Deposito {
+    private static int depositos;
     private LinkedList produtos;
-    private int x, y;
+    private int x, y, id;
     private double distancia;
 
-    public Deposito(LinkedList produtos, int x, int y) {
-        this.produtos = produtos;
+    public Deposito(int x, int y) {
+        depositos++;
+        this.id = depositos;
+        this.produtos = null;
         this.x = x;
         this.y = y;
         distancia = 0;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public LinkedList getProdutos() {
