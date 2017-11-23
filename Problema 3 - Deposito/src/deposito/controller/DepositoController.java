@@ -9,6 +9,8 @@ import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.MulticastSocket;
+import java.net.SocketException;
+import java.net.UnknownHostException;
 import java.util.LinkedList;
 
 public class DepositoController {
@@ -21,6 +23,7 @@ public class DepositoController {
     private InetAddress group;
     private byte[] buf;
     private LinkedList produtos;
+    private String login;
     
     public DepositoController(String ip, int porta) throws IOException{
         this.ip = ip;
@@ -29,6 +32,24 @@ public class DepositoController {
         grupo = InetAddress.getByName(ip);
         socket = new MulticastSocket(porta);
         socket.joinGroup(grupo);
+        login = null;
+    }
+    
+    public void loginDeposito() throws SocketException, UnknownHostException, IOException{
+        String output = "D#L#";
+        s = new DatagramSocket();
+        group = InetAddress.getByName(ip);
+        buf = output.getBytes();
+ 
+        DatagramPacket packet 
+          = new DatagramPacket(buf, buf.length, group, porta);
+        socket.send(packet);
+        
+        byte[] recebe = new byte[1000];
+        DatagramPacket recv = new DatagramPacket(recebe, recebe.length);
+        socket.receive(recv);
+        String data = new String(recv.getData());
+        login = data;
     }
 
     public void adicionarProduto(int qtd, String nome, String peso, String preco) throws IOException{
@@ -43,13 +64,8 @@ public class DepositoController {
           = new DatagramPacket(buf, buf.length, group, porta);
         socket.send(packet);
         
-//        DatagramPacket pacote = new DatagramPacket(output.getBytes(), output.length(),
-//                             grupo, porta);
-//        socket.send(pacote);
-//        
-//        byte[] buf = new byte[1000];
-//        DatagramPacket recv = new DatagramPacket(buf, buf.length);
-//        socket.receive(recv);
+        
+        
     }
     
     public void removeProduto(int id) throws IOException{
