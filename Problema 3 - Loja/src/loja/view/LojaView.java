@@ -5,11 +5,16 @@
  */
 package loja.view;
 
+import java.awt.FlowLayout;
+import java.awt.GridLayout;
 import java.io.IOException;
+import java.util.LinkedList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.BoxLayout;
 import javax.swing.JOptionPane;
 import loja.controller.LojaController;
+import loja.model.Produto;
 
 /**
  *
@@ -41,10 +46,6 @@ public class LojaView extends javax.swing.JFrame {
         jLabel3 = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
         carrinho = new javax.swing.JButton();
-        produto = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
-        jButton2 = new javax.swing.JButton();
-        jSeparator1 = new javax.swing.JSeparator();
         login = new javax.swing.JButton();
         jSeparator2 = new javax.swing.JSeparator();
         ipC = new javax.swing.JTextField();
@@ -53,6 +54,9 @@ public class LojaView extends javax.swing.JFrame {
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         status = new javax.swing.JLabel();
+        btnAtualizar = new javax.swing.JButton();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jPanelProdutos = new javax.swing.JPanel();
 
         jButton1.setText("jButton1");
 
@@ -69,22 +73,6 @@ public class LojaView extends javax.swing.JFrame {
                 carrinhoActionPerformed(evt);
             }
         });
-
-        produto.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        produto.setText("Produto");
-
-        jLabel2.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        jLabel2.setText("Valor: R$20,00");
-
-        jButton2.setText("Adicionar no carrinho");
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
-            }
-        });
-
-        jSeparator1.setBackground(new java.awt.Color(51, 102, 255));
-        jSeparator1.setOrientation(javax.swing.SwingConstants.VERTICAL);
 
         login.setText("Login");
         login.addActionListener(new java.awt.event.ActionListener() {
@@ -108,6 +96,26 @@ public class LojaView extends javax.swing.JFrame {
 
         status.setText("Status: desconectado");
 
+        btnAtualizar.setText("Atualizar");
+        btnAtualizar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAtualizarActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanelProdutosLayout = new javax.swing.GroupLayout(jPanelProdutos);
+        jPanelProdutos.setLayout(jPanelProdutosLayout);
+        jPanelProdutosLayout.setHorizontalGroup(
+            jPanelProdutosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 631, Short.MAX_VALUE)
+        );
+        jPanelProdutosLayout.setVerticalGroup(
+            jPanelProdutosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 259, Short.MAX_VALUE)
+        );
+
+        jScrollPane1.setViewportView(jPanelProdutos);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -115,27 +123,11 @@ public class LojaView extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGap(53, 53, 53)
                 .addComponent(login)
-                .addGap(82, 82, 82)
+                .addGap(93, 93, 93)
                 .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(carrinho)
                 .addGap(31, 31, 31))
-            .addComponent(jSeparator2, javax.swing.GroupLayout.Alignment.TRAILING)
-            .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(61, 61, 61)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel2)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(8, 8, 8)
-                                .addComponent(produto))))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(39, 39, 39)
-                        .addComponent(jButton2)))
-                .addGap(18, 18, 18)
-                .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 8, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(layout.createSequentialGroup()
                 .addGap(39, 39, 39)
                 .addComponent(jLabel4)
@@ -147,14 +139,20 @@ public class LojaView extends javax.swing.JFrame {
                 .addComponent(portaC, javax.swing.GroupLayout.PREFERRED_SIZE, 69, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(35, 35, 35)
                 .addComponent(conectar)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 50, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 76, Short.MAX_VALUE)
                 .addComponent(status)
                 .addGap(54, 54, 54))
+            .addComponent(jScrollPane1)
+            .addComponent(jSeparator2)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(275, 275, 275)
+                .addComponent(btnAtualizar)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(19, 19, 19)
+                .addContainerGap(19, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(ipC, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(portaC, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -169,31 +167,23 @@ public class LojaView extends javax.swing.JFrame {
                     .addComponent(carrinho)
                     .addComponent(jLabel1)
                     .addComponent(login))
-                .addGap(35, 35, 35)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(produto)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabel2)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton2))
-                    .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(189, Short.MAX_VALUE))
+                .addGap(13, 13, 13)
+                .addComponent(btnAtualizar)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 261, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void carrinhoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_carrinhoActionPerformed
-        // TODO add your handling code here:
+        Carrinho carrinho = new Carrinho(this, true, controladorOk.retornaProdutosCarrinho());
+        carrinho.setVisible(true);
     }//GEN-LAST:event_carrinhoActionPerformed
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton2ActionPerformed
-
     private void loginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loginActionPerformed
-        // TODO add your handling code here:
+        LoginView loginView = new LoginView(this, true);
+        loginView.setVisible(true);
     }//GEN-LAST:event_loginActionPerformed
 
     private void conectarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_conectarActionPerformed
@@ -218,6 +208,40 @@ public class LojaView extends javax.swing.JFrame {
             Logger.getLogger(LojaView.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_conectarActionPerformed
+
+    private void btnAtualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAtualizarActionPerformed
+        jPanelProdutos.removeAll();
+       // try {
+            LinkedList produtos = new LinkedList();
+            Produto produto1 = new Produto(3, "prod", 1, 3);
+            produtos.add(produto1);
+            Produto produto2 = new Produto(1, "aaaaaa", 1, 10);
+            produtos.add(produto2);
+            Produto produto3 = new Produto(3, "prod", 1, 3);
+            produtos.add(produto3);
+            Produto produto4 = new Produto(1, "aaaaaa", 1, 10);
+            produtos.add(produto4);
+            System.out.println(produtos.toString());
+                    //controladorOk.retornaProdutos();;
+            for(Object o: produtos){
+                Produto produto = (Produto) o;
+                System.out.println(produto.toString());
+                System.out.println(produto.getNome());
+                ProdutoView produtoView = new ProdutoView(produto.getNome(), produto.getPreco(), controladorOk);
+                
+                jPanelProdutos.add(produtoView);
+                jPanelProdutos.setLayout(new GridLayout(3,3));
+                jPanelProdutos.setVisible(true);
+                
+                produtoView.setVisible(true);
+                jPanelProdutos.updateUI();
+                
+            }
+        //} catch (IOException | ClassNotFoundException ex) {
+        //    Logger.getLogger(LojaView.class.getName()).log(Level.SEVERE, null, ex);
+       // }
+        
+    }//GEN-LAST:event_btnAtualizarActionPerformed
 
     /**
      * @param args the command line arguments
@@ -265,21 +289,20 @@ public class LojaView extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnAtualizar;
     private javax.swing.JButton carrinho;
     private javax.swing.JButton conectar;
     private javax.swing.JTextField ipC;
     private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
-    private javax.swing.JSeparator jSeparator1;
+    private javax.swing.JPanel jPanelProdutos;
+    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JSeparator jSeparator2;
     private javax.swing.JButton login;
     private javax.swing.JTextField portaC;
-    private javax.swing.JLabel produto;
     private javax.swing.JLabel status;
     // End of variables declaration//GEN-END:variables
 }

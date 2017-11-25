@@ -5,18 +5,20 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.LinkedList;
+import loja.model.Produto;
 
 public class LojaController {
     
     private ObjectOutputStream outcliente;
     private ObjectInputStream incliente;
-    LinkedList carrinho;
-    Socket socket;
-    String ip;
-    int porta;
+    private LinkedList carrinho, produtos;
+    private Socket socket;
+    private String ip;
+    private int porta;
     
     public LojaController(String ip, int porta) throws IOException{
         carrinho = new LinkedList();
+        produtos = null;
         socket = null;
         this.ip = ip;
         this.porta = porta;
@@ -45,14 +47,32 @@ public class LojaController {
         return (boolean) incliente.readObject();
     }
     
-    public boolean adicionarCarrinho(int id, int qtd) throws IOException, ClassNotFoundException{
-        String add = "L#A#" + id + "#" + qtd + "#";
+    public LinkedList retornaProdutos() throws IOException, ClassNotFoundException{
+        String output = "L#R#";
+        //outcliente.writeObject(output);
+       // produtos = (LinkedList) incliente.readObject();
+        return produtos;
+    }
+    public LinkedList retornaProdutosCarrinho(){
+        return carrinho;
+    }
+    public boolean adicionarCarrinho(String nome) throws IOException, ClassNotFoundException{
+        boolean aux = false;
+        for(Object o: produtos){
+            Produto produto = (Produto) o;
+            if(produto.getNome()==nome){
+                carrinho.add(produto);
+                aux = true;
+                break;
+            }
+        }
+        //String add = "L#A#" + nome + "#" + qtd + "#";
         
-        outcliente.writeObject(add);
+        //outcliente.writeObject(add);
         
-        carrinho.add(incliente.readObject());
+        //carrinho.add(incliente.readObject());
         
-        return (boolean) incliente.readObject();
+        return aux;
     }
     
     public boolean confirmaCompra() throws IOException, ClassNotFoundException{
