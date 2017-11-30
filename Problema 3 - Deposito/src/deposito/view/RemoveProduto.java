@@ -6,6 +6,9 @@
 package deposito.view;
 
 import deposito.controller.DepositoController;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -49,6 +52,11 @@ public class RemoveProduto extends javax.swing.JFrame {
 
         confirma.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         confirma.setText("Confirma");
+        confirma.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                confirmaActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -93,6 +101,14 @@ public class RemoveProduto extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void confirmaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_confirmaActionPerformed
+        try {
+            controlador.removeProduto(Integer.parseInt(idRemove.getText()), Integer.parseInt(qtdRemove.getText()));
+        } catch (IOException ex) {
+            Logger.getLogger(RemoveProduto.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_confirmaActionPerformed
 
     /**
      * @param args the command line arguments

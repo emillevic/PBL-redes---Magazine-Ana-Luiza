@@ -2,6 +2,8 @@
 package deposito.controller;
 
 import deposito.model.Produto;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -36,8 +38,8 @@ public class DepositoController {
         login = null;
     }
     
-    public void loginDeposito() throws SocketException, UnknownHostException, IOException{
-        String output = "D#L#" + InetAddress.getLocalHost().getHostAddress() + "#" + portaDeposito + "#";
+    public void loginDeposito(int x, int y) throws SocketException, UnknownHostException, IOException{
+        String output = "D#L#" + InetAddress.getLocalHost().getHostAddress() + "#" + portaDeposito + "#" + x + "#" + y + "#";
         s = new DatagramSocket();
         group = InetAddress.getByName(ip);
         buf = output.getBytes();
@@ -53,10 +55,29 @@ public class DepositoController {
         login = data;
     }
 
-    public void adicionarProduto(int qtd, String nome, String peso, String preco) throws IOException{
-        String output = "D#A#" + qtd + "#" + nome + "#" + peso + "#" + preco + "#";
-        Produto produto = new Produto(qtd, nome, Float.parseFloat(peso), Float.parseFloat(preco));
-        produtos.add(produto);
+    public boolean adicionarProduto(int qtd, String nome, String peso, String preco) throws IOException{
+        String output = "D#A#"+ login + "#" + qtd + "#" + nome + "#" + peso + "#" + preco + "#";
+        boolean aux = false;
+        Produto produto = null;
+        FileOutputStream stream = new FileOutputStream("produtos.txt");
+        ObjectOutputStream os = new ObjectOutputStream(stream);
+        
+        for(Object o: produtos){
+            produto = (Produto) o;
+            if(produto.getNome() == nome){
+                produto.setQtd(qtd);
+                produto.setPeso(Float.parseFloat(peso));
+                produto.setPreco(Float.parseFloat(preco));
+                aux = true;
+                break;
+            }
+        }
+        if(aux == false){
+            produto = new Produto(qtd, nome, Float.parseFloat(peso), Float.parseFloat(preco));
+            produtos.add(produto);
+            os.writeObject(produto);
+        }
+        
         s = new DatagramSocket();
         group = InetAddress.getByName(ip);
         buf = output.getBytes();
@@ -65,31 +86,55 @@ public class DepositoController {
           = new DatagramPacket(buf, buf.length, group, porta);
         socket.send(packet);
         
+        byte[] bufrecebe = new byte[256];
+        DatagramPacket pacote = new DatagramPacket(bufrecebe, bufrecebe.length);
+        socket.receive(pacote);
+        String recebe = new String(
+        pacote.getData(), 0, pacote.getLength());
         
-        
+        return Boolean.parseBoolean(recebe);
     }
     
-    public void removeProduto(int id) throws IOException{
-        String output = "D#R#" + id + "#";
+    public boolean removeProduto(int id, int qtd) throws IOException{
+        int n = 0;
+        String output = "D#R#" + login + "#" + id + "#" + qtd + "#";
         for(Object p: produtos){
             Produto prod = (Produto) p;
             if(prod.getId()==id){
-                produtos.remove(prod);
+                if(prod.getQtd() < qtd){
+                    return false;
+                }
+                else if(prod.getQtd()== qtd){
+                    produtos.remove(prod);
+                }
+                else{
+                    produtos.remove(prod);
+                    prod.setQtd(prod.getQtd()-qtd);
+                    produtos.add(n, prod);
+                } 
                 break;
             }
+            n++;
         }
         DatagramPacket pacote = new DatagramPacket(output.getBytes(), output.length(),
-                             grupo, porta);
+                            grupo, porta);
         socket.send(pacote);
         
         byte[] buf = new byte[1000];
         DatagramPacket recv = new DatagramPacket(buf, buf.length);
         socket.receive(recv);
+        
+        byte[] bufrecebe = new byte[256];
+        DatagramPacket pacote1 = new DatagramPacket(bufrecebe, bufrecebe.length);
+        socket.receive(pacote1);
+        String recebe = new String(
+        pacote1.getData(), 0, pacote1.getLength());
+        
+        return Boolean.parseBoolean(recebe);
+        
     }
     
     public LinkedList getProdutos(){
         return produtos;
-    }
-    
-    
+    } 
 }
