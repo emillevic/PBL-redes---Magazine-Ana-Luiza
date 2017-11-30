@@ -24,7 +24,7 @@ public class ServidorController {
     private boolean conectado;
     private MulticastSocket socket;
     private byte[] buf;
-    private LinkedList depositos;
+    private LinkedList depositos, produtos;
     private Socket socketBalanceador;
     private ObjectOutputStream outserver;
     private ObjectInputStream inserver;
@@ -51,15 +51,11 @@ public class ServidorController {
         InetAddress group = InetAddress.getByName(ipMulticast);
         socket.joinGroup(group);
         outserver.writeObject("S#" + portaLoja + "#" + InetAddress.getLocalHost().getHostAddress() + "#");
+        
         while (true) {
-            DatagramPacket packet = new DatagramPacket(buf, buf.length);
-            socket.receive(packet);
-            String received = new String(
-              packet.getData(), 0, packet.getLength());
-            System.out.println(received);
-            if(received.startsWith("D")){
-                LojaThread thread = new LojaThread(this, socket, received);
-            }
+            DepositoThread thread = new DepositoThread(this, socket);
+            Thread t1 = new Thread(thread);
+            t1.start();
         }
     }
     
@@ -69,7 +65,7 @@ public class ServidorController {
 
         while(true){//fica esperando uma conexão
             Socket cliente = servidor.accept();
-            ThreadPrincipal tr = new ThreadPrincipal(this, cliente);
+            LojaThread tr = new LojaThread(this, cliente);
             Thread t = new Thread(tr);
             t.start();
         }
@@ -81,22 +77,28 @@ public class ServidorController {
         return deposito.getId();
     }
     
-    public void adicionaProdutoDeposito(Produto produto, int x, int y){
+    public boolean adicionaProdutoDeposito(Produto produto, int id){
         for(Object o: depositos){
             Deposito deposito = (Deposito) o;
-            if(deposito.getX() == x && deposito.getY() == y){
+            if(deposito.getId() == id){
                 deposito.addProduto(produto);
+                System.out.println(produto);
+                System.out.println(deposito.getProdutos().toString());
+                return true;
             }
         }
+        return false;
     }
     
-    public void removeProdutoDeposito(Produto produto, int x, int y){
+    public boolean removeProdutoDeposito(Produto produto, int id){
         for(Object o: depositos){
             Deposito deposito = (Deposito) o;
-            if(deposito.getX() == x && deposito.getY() == y){
+            if(deposito.getId() == id){
                 deposito.removeProduto(produto);
+                return true;
             }
         }
+        return false;
     }
     
     public boolean loginLoja(String login, String senha) throws FileNotFoundException, IOException{
@@ -126,23 +128,52 @@ public class ServidorController {
         return false;
     }
     
-    public Integer[] depositoPerto(int x, int y){
+    public LinkedList retornaProdutos(){
+        return produtos;
+    }
+    
+    public LinkedList retornaProdutosDeposito(int id){
+        for(Object o: depositos){
+            Deposito deposito = (Deposito) o;
+            if(deposito.getId() == id){
+                return deposito.getProdutos();
+            }
+        }
+        return null;
+    }
+    
+    public float calculaFrete(int x, int y, LinkedList produtos){
+        float peso = 0, frete = 0;
+        for(Object o: produtos){
+            Produto produto = (Produto) o;
+            peso+=produto.getPeso();
+        }
+        double dist = depositoPerto(x, y);
+        frete+=(dist*0.10);
+        frete+=(peso*0.005);
+        return frete;
+    }
+    
+    public double depositoPerto(int x, int y){
         LinkedList depositos = new LinkedList();
-        int xd = 0, yd = 0;
+        int xd = 0, yd = 0, index=0, indexok=0;
         double dist = Double.MAX_VALUE;
         for(Object obj: depositos){
             Deposito deposito = (Deposito) obj;
             int xdeposito = deposito.getX();
             int ydeposito = deposito.getY();
             if(Math.sqrt((x-xdeposito)^2+(y-ydeposito)^2) <= dist){
+                dist = Math.sqrt((x-xdeposito)^2+(y-ydeposito)^2);
                 xd = xdeposito;
                 yd = ydeposito;
+                indexok = index;
             }
+            index++;
         }
         Integer[] coordenada = new Integer[2];
         coordenada[0] = xd;
         coordenada[1] = yd;
-        return coordenada;
+        return dist;
     }
 
     public boolean efetuaCompra(Deposito deposito, LinkedList produtos){
