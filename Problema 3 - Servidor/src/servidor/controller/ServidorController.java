@@ -53,6 +53,12 @@ public class ServidorController {
         outserver.writeObject("S#" + portaLoja + "#" + InetAddress.getLocalHost().getHostAddress() + "#");
         
         while (true) {
+            DatagramPacket packet = new DatagramPacket(buf, buf.length);
+            socket.receive(packet);
+            String received = new String(
+              packet.getData(), 0, packet.getLength());
+            System.out.println(received);
+            
             DepositoThread thread = new DepositoThread(this, socket);
             Thread t1 = new Thread(thread);
             t1.start();
