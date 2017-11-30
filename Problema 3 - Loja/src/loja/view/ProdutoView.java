@@ -85,10 +85,11 @@ public class ProdutoView extends javax.swing.JPanel {
 
     private void btnAddCarrinhoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddCarrinhoActionPerformed
         try {
-            controlador.adicionarCarrinho(nome);
-        } catch (IOException ex) {
-            Logger.getLogger(ProdutoView.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (ClassNotFoundException ex) {
+            System.out.println(controlador);
+            System.out.println(nome);
+            boolean aux = controlador.adicionarCarrinho(nome);
+            System.out.println(aux);
+        } catch (IOException | ClassNotFoundException ex) {
             Logger.getLogger(ProdutoView.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_btnAddCarrinhoActionPerformed

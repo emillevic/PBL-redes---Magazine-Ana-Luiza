@@ -37,6 +37,7 @@ public class LojaController {
         socket.close();
         return address;
     }
+    
     public boolean loginCliente(String nick, String senha) throws IOException, ClassNotFoundException{
         String login = "L#L#" + nick + "#" + senha + "#";
         
@@ -49,18 +50,20 @@ public class LojaController {
     
     public LinkedList retornaProdutos() throws IOException, ClassNotFoundException{
         String output = "L#R#";
-        //outcliente.writeObject(output);
-       // produtos = (LinkedList) incliente.readObject();
+        outcliente.writeObject(output);
+        produtos = (LinkedList) incliente.readObject();
         return produtos;
     }
+    
     public LinkedList retornaProdutosCarrinho(){
         return carrinho;
     }
+    
     public boolean adicionarCarrinho(String nome) throws IOException, ClassNotFoundException{
         boolean aux = false;
         for(Object o: produtos){
             Produto produto = (Produto) o;
-            if(produto.getNome()==nome){
+            if(produto.getNome().equals(nome)){
                 carrinho.add(produto);
                 aux = true;
                 break;
@@ -73,6 +76,13 @@ public class LojaController {
         //carrinho.add(incliente.readObject());
         
         return aux;
+    }
+    
+    public boolean calculaFrete(int x, int y) throws IOException, ClassNotFoundException{
+        String frete = "L#F#" + x + "#" + y + "#";
+        outcliente.writeObject(frete);
+        outcliente.writeObject(carrinho);
+        return (boolean) incliente.readObject();
     }
     
     public boolean confirmaCompra() throws IOException, ClassNotFoundException{

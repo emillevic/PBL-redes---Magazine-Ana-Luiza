@@ -29,7 +29,7 @@ public class Carrinho extends javax.swing.JDialog {
     }
     
     private void alteraTabela(){
-                if(carrinho!= null){
+        if(carrinho!= null){
             DefaultTableModel val = (DefaultTableModel) jTable1.getModel();
 
             for(Object o: carrinho){

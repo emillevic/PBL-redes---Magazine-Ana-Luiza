@@ -223,6 +223,7 @@ public class LojaView extends javax.swing.JFrame {
             produtos.add(produto4);
             System.out.println(produtos.toString());
                     //controladorOk.retornaProdutos();;
+                    System.out.println(controladorOk);
             for(Object o: produtos){
                 Produto produto = (Produto) o;
                 System.out.println(produto.toString());
