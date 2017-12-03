@@ -12,7 +12,7 @@ public class Deposito {
     public Deposito(int x, int y) {
         depositos++;
         this.id = depositos;
-        this.produtos = null;
+        this.produtos = new LinkedList();
         this.x = x;
         this.y = y;
         distancia = 0;

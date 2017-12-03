@@ -59,7 +59,7 @@ public class ServidorController {
               packet.getData(), 0, packet.getLength());
             System.out.println(received);
             
-            DepositoThread thread = new DepositoThread(this, socket);
+            DepositoThread thread = new DepositoThread(this, socket, received);
             Thread t1 = new Thread(thread);
             t1.start();
         }
@@ -88,8 +88,12 @@ public class ServidorController {
             Deposito deposito = (Deposito) o;
             if(deposito.getId() == id){
                 deposito.addProduto(produto);
-                System.out.println(produto);
-                System.out.println(deposito.getProdutos().toString());
+                LinkedList lista = deposito.getProdutos();
+                for(Object os: lista){
+                   Produto prods = (Produto)os;
+                    System.out.println(prods.getNome());
+                   
+                }
                 return true;
             }
         }
@@ -101,6 +105,12 @@ public class ServidorController {
             Deposito deposito = (Deposito) o;
             if(deposito.getId() == id){
                 deposito.removeProduto(produto);
+                LinkedList lista = deposito.getProdutos();
+                for(Object os: lista){
+                   Produto prods = (Produto)os;
+                    System.out.println(prods.getNome());
+                   
+                }
                 return true;
             }
         }

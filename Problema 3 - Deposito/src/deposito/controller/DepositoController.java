@@ -2,7 +2,9 @@
 package deposito.controller;
 
 import deposito.model.Produto;
+import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -25,7 +27,7 @@ public class DepositoController {
     private InetAddress group;
     private byte[] buf;
     private LinkedList produtos;
-    private String login;
+    private int login;
     
     public DepositoController(String ip, int porta, int portaDeposito) throws IOException{
         this.ip = ip;
@@ -35,12 +37,12 @@ public class DepositoController {
         grupo = InetAddress.getByName(ip);
         socket = new MulticastSocket(porta);
         socket.joinGroup(grupo);
-        login = null;
+        login = -1;
     }
     
     public void loginDeposito(int x, int y) throws SocketException, UnknownHostException, IOException{
         String output = "D#L#" + InetAddress.getLocalHost().getHostAddress() + "#" + portaDeposito + "#" + x + "#" + y + "#";
-        s = new DatagramSocket();
+        s = new DatagramSocket(portaDeposito);
         group = InetAddress.getByName(ip);
         buf = output.getBytes();
  
@@ -50,30 +52,38 @@ public class DepositoController {
         
         byte[] recebe = new byte[1000];
         DatagramPacket recv = new DatagramPacket(recebe, recebe.length);
-        socket.receive(recv);
-        String data = new String(recv.getData());
-        login = data;
+        s.receive(recv);
+        String data = new String(recv.getData(), 0, packet.getLength());
+        String[] aux = data.split("#");
+        char l = aux[1].charAt(0);
+        login = Character.getNumericValue(l);
+        System.out.println(login);
     }
 
-    public boolean adicionarProduto(int qtd, String nome, String peso, String preco) throws IOException{
-        String output = "D#A#"+ login + "#" + qtd + "#" + nome + "#" + peso + "#" + preco + "#";
+    public boolean adicionarProduto(int id, int qtd, String nome, String peso, String preco) throws IOException, ClassNotFoundException{
+        String output = "D#A#"+ login + "#" + id + "#" + nome + "#" + peso + "#" + preco + "#" + qtd + "#";
         boolean aux = false;
         Produto produto = null;
         FileOutputStream stream = new FileOutputStream("produtos.txt");
         ObjectOutputStream os = new ObjectOutputStream(stream);
+        FileInputStream streami = new FileInputStream("produtos.txt");
+        ObjectInputStream is = new ObjectInputStream(streami);
         
+       
         for(Object o: produtos){
             produto = (Produto) o;
-            if(produto.getNome() == nome){
+            if(produto.getId() == id){
                 produto.setQtd(qtd);
                 produto.setPeso(Float.parseFloat(peso));
                 produto.setPreco(Float.parseFloat(preco));
                 aux = true;
+                removeArquivo(produto);
+                os.writeObject(produto);
                 break;
             }
         }
         if(aux == false){
-            produto = new Produto(qtd, nome, Float.parseFloat(peso), Float.parseFloat(preco));
+            produto = new Produto(id, qtd, nome, Float.parseFloat(peso), Float.parseFloat(preco));
             produtos.add(produto);
             os.writeObject(produto);
         }
@@ -134,6 +144,25 @@ public class DepositoController {
         
     }
     
+    private void removeArquivo(Produto produto) throws FileNotFoundException, IOException, ClassNotFoundException{
+        FileOutputStream stream = new FileOutputStream("produtos.txt");
+        ObjectOutputStream os = new ObjectOutputStream(stream);
+        FileInputStream streami = new FileInputStream("produtos.txt");
+        ObjectInputStream is = new ObjectInputStream(streami);
+        
+        FileOutputStream stream2 = new FileOutputStream("produtos2.txt");
+        ObjectOutputStream os2 = new ObjectOutputStream(stream2);
+        while(is.readObject() != null){
+            Produto prod = (Produto) is.readObject();
+            if(!prod.equals(produto)){
+                os.writeObject(produto);
+            }
+        }
+        File produtos = new File("produtos.txt");
+        produtos.delete();
+        File arquivo = new File("produtos2.txt");
+        arquivo.renameTo(new File("produtos.txt"));
+    }
     public LinkedList getProdutos(){
         return produtos;
     } 

@@ -9,9 +9,9 @@ public class Produto implements Serializable{
     private String nome;
     private float peso, preco;
 
-    public Produto(int qtd, String nome, float peso, float preco) {
+    public Produto(int id, int qtd, String nome, float peso, float preco) {
         produtos++;
-        this.id = produtos;
+        this.id = id;
         this.qtd = qtd;
         this.nome = nome;
         this.peso = peso;

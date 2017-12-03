@@ -46,6 +46,8 @@ public class AddProduto extends javax.swing.JFrame {
         jLabel5 = new javax.swing.JLabel();
         precoProduto = new javax.swing.JTextField();
         addProduct = new javax.swing.JButton();
+        jLabel6 = new javax.swing.JLabel();
+        txtIdProduto = new javax.swing.JTextField();
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         jLabel1.setText("Adicionar Produto");
@@ -77,48 +79,64 @@ public class AddProduto extends javax.swing.JFrame {
             }
         });
 
+        jLabel6.setText("ID Produto:");
+
+        txtIdProduto.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtIdProdutoActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap(55, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel3)
-                                .addGap(88, 88, 88))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addComponent(jLabel4)
-                                .addGap(109, 109, 109)))
-                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                            .addComponent(jLabel5)
-                            .addGap(103, 103, 103)))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel2)
-                        .addGap(99, 99, 99)))
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                    .addComponent(qtdProduto, javax.swing.GroupLayout.DEFAULT_SIZE, 95, Short.MAX_VALUE)
-                    .addComponent(nomeProduto, javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(pesoProduto, javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(precoProduto, javax.swing.GroupLayout.Alignment.LEADING))
-                .addGap(84, 84, 84))
-            .addGroup(layout.createSequentialGroup()
                 .addGap(164, 164, 164)
                 .addComponent(addProduct)
                 .addGap(0, 0, Short.MAX_VALUE))
             .addGroup(layout.createSequentialGroup()
-                .addGap(128, 128, 128)
-                .addComponent(jLabel1)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(128, 128, 128)
+                        .addComponent(jLabel1))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(59, 59, 59)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(jLabel3)
+                                        .addGap(88, 88, 88))
+                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                        .addComponent(jLabel4)
+                                        .addGap(109, 109, 109)))
+                                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                    .addComponent(jLabel5)
+                                    .addGap(103, 103, 103)))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel2)
+                                    .addComponent(jLabel6))
+                                .addGap(99, 99, 99)))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addComponent(qtdProduto)
+                            .addComponent(nomeProduto, javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(pesoProduto, javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(precoProduto, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 95, Short.MAX_VALUE)
+                            .addComponent(txtIdProduto, javax.swing.GroupLayout.Alignment.LEADING))))
+                .addContainerGap(79, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jLabel1)
-                .addGap(36, 36, 36)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 7, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel6)
+                    .addComponent(txtIdProduto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
                     .addComponent(qtdProduto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -134,7 +152,7 @@ public class AddProduto extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel5)
                     .addComponent(precoProduto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 28, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(addProduct)
                 .addGap(25, 25, 25))
         );
@@ -147,10 +165,10 @@ public class AddProduto extends javax.swing.JFrame {
     }//GEN-LAST:event_nomeProdutoActionPerformed
 
     private void addProductActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addProductActionPerformed
-        if(Integer.parseInt(qtdProduto.getValue().toString())>0 && nomeProduto.getText() != null & pesoProduto.getText() != null & precoProduto.getText() != null){
+        if(txtIdProduto.getText() != null && Integer.parseInt(qtdProduto.getValue().toString())>0 && nomeProduto.getText() != null & pesoProduto.getText() != null & precoProduto.getText() != null){
             try {
-                controlador.adicionarProduto(Integer.parseInt(qtdProduto.getValue().toString()), nomeProduto.getText(), pesoProduto.getText(), precoProduto.getText());
-            }catch (IOException ex) {
+                controlador.adicionarProduto(Integer.parseInt(txtIdProduto.getText()), Integer.parseInt(qtdProduto.getValue().toString()), nomeProduto.getText(), pesoProduto.getText(), precoProduto.getText());
+            }catch (IOException | ClassNotFoundException ex) {
                 Logger.getLogger(AddProduto.class.getName()).log(Level.SEVERE, null, ex);
             }
             JOptionPane.showMessageDialog(rootPane, "Produto Adicionado!", " ", JOptionPane.INFORMATION_MESSAGE, null);
@@ -159,6 +177,10 @@ public class AddProduto extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(rootPane, "Valor inválido!", "Erro", JOptionPane.ERROR_MESSAGE, null);
         }
     }//GEN-LAST:event_addProductActionPerformed
+
+    private void txtIdProdutoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtIdProdutoActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtIdProdutoActionPerformed
 
     /**
      * @param args the command line arguments
@@ -202,10 +224,12 @@ public class AddProduto extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
     private javax.swing.JSpinner jSpinner1;
     private javax.swing.JTextField nomeProduto;
     private javax.swing.JTextField pesoProduto;
     private javax.swing.JTextField precoProduto;
     private javax.swing.JSpinner qtdProduto;
+    private javax.swing.JTextField txtIdProduto;
     // End of variables declaration//GEN-END:variables
 }

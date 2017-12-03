@@ -217,6 +217,7 @@ public class DepositoView extends javax.swing.JFrame {
         try {
             controlador = new DepositoController(ip, porta, portDeposito);
             estado.setText("Conectado");
+            controlador.loginDeposito(Integer.parseInt(txtX.getText()), Integer.parseInt(txtY.getText()));
             
             
 //        Endereco end = new Endereco(this);
@@ -239,6 +240,7 @@ public class DepositoView extends javax.swing.JFrame {
 
     private void butAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_butAddActionPerformed
         if(controlador != null){
+            System.out.println(controlador);
             AddProduto add = new AddProduto(controlador);
             add.setVisible(true);
             
