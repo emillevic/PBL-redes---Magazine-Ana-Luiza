@@ -262,8 +262,9 @@ public class DepositoView extends javax.swing.JFrame {
 
     private void atualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_atualizarActionPerformed
        listarProdutos.removeAll();
+       listarProdutos.updateUI();
        DefaultTableModel val = (DefaultTableModel) listarProdutos.getModel();
-       
+       val.setNumRows(0);
        produtos = controlador.getProdutos();
        for(Object o: produtos){
            Produto prod = (Produto) o;
