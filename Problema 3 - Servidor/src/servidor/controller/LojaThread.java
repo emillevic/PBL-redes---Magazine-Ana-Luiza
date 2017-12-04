@@ -32,10 +32,8 @@ public class LojaThread implements Runnable{
         this.deposito = null;
         this.controlador = controlador;
         this.socket = socket;
-        this.outloja = outloja;
-        this.inloja = inloja;
-        this.recebe = recebe;
-        bufrecebe = new byte[256];
+        this.outloja = new ObjectOutputStream(socket.getOutputStream());
+        this.inloja = new ObjectInputStream(socket.getInputStream());
     }
     @Override
     public void run() {

@@ -5,17 +5,24 @@
  */
 package loja.view;
 
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JOptionPane;
+import loja.controller.LojaController;
+
 /**
  *
  * @author Cliente
  */
 public class LoginView extends javax.swing.JDialog {
-
+    private LojaController controlador;
     /**
      * Creates new form LoginView
      */
-    public LoginView(java.awt.Frame parent, boolean modal) {
+    public LoginView(java.awt.Frame parent, boolean modal, LojaController controlador) {
         super(parent, modal);
+        this.controlador = controlador;
         initComponents();
     }
 
@@ -97,7 +104,19 @@ public class LoginView extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnLogarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLogarActionPerformed
-        // TODO add your handling code here:
+        if(txtLogin.getText() != null || txtSenha.getText() != null || controlador != null){
+            try {
+                System.out.println(controlador);
+                boolean confirma = controlador.loginCliente(txtLogin.getText(), txtSenha.getText());
+                if(confirma)
+                    JOptionPane.showMessageDialog(rootPane, "Cliente logado!", " ", JOptionPane.INFORMATION_MESSAGE, null);
+            } catch (IOException | ClassNotFoundException ex) {
+                Logger.getLogger(LoginView.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        else{
+            JOptionPane.showMessageDialog(rootPane, "Login inválido!", "Erro", JOptionPane.ERROR_MESSAGE, null);
+        }
     }//GEN-LAST:event_btnLogarActionPerformed
 
     /**
@@ -130,7 +149,7 @@ public class LoginView extends javax.swing.JDialog {
         /* Create and display the dialog */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                LoginView dialog = new LoginView(new javax.swing.JFrame(), true);
+                LoginView dialog = new LoginView(new javax.swing.JFrame(), true, null);
                 dialog.addWindowListener(new java.awt.event.WindowAdapter() {
                     @Override
                     public void windowClosing(java.awt.event.WindowEvent e) {

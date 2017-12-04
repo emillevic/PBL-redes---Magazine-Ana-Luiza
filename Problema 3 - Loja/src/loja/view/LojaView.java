@@ -182,7 +182,7 @@ public class LojaView extends javax.swing.JFrame {
     }//GEN-LAST:event_carrinhoActionPerformed
 
     private void loginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loginActionPerformed
-        LoginView loginView = new LoginView(this, true);
+        LoginView loginView = new LoginView(this, true, controladorOk);
         loginView.setVisible(true);
     }//GEN-LAST:event_loginActionPerformed
 
@@ -200,7 +200,9 @@ public class LojaView extends javax.swing.JFrame {
                 ip = (String) address[1];
                 porta = (Integer) address[0];
                 controladorOk = new LojaController(ip, porta);
-                boolean con = controlador.instanciaSocket();
+                System.out.println(porta);
+                System.out.println(ip);
+                boolean con = controladorOk.instanciaSocket();
                 if(con)
                     status.setText("Conectado");
             }
@@ -212,31 +214,28 @@ public class LojaView extends javax.swing.JFrame {
     private void btnAtualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAtualizarActionPerformed
         jPanelProdutos.removeAll();
        // try {
-            LinkedList produtos = new LinkedList();
-            Produto produto1 = new Produto(3, "prod", 1, 3);
-            produtos.add(produto1);
-            Produto produto2 = new Produto(1, "aaaaaa", 1, 10);
-            produtos.add(produto2);
-            Produto produto3 = new Produto(3, "prod", 1, 3);
-            produtos.add(produto3);
-            Produto produto4 = new Produto(1, "aaaaaa", 1, 10);
-            produtos.add(produto4);
-            System.out.println(produtos.toString());
-                    //controladorOk.retornaProdutos();;
-                    System.out.println(controladorOk);
-            for(Object o: produtos){
-                Produto produto = (Produto) o;
-                System.out.println(produto.toString());
-                System.out.println(produto.getNome());
-                ProdutoView produtoView = new ProdutoView(produto.getNome(), produto.getPreco(), controladorOk);
-                
-                jPanelProdutos.add(produtoView);
-                jPanelProdutos.setLayout(new GridLayout(3,3));
-                jPanelProdutos.setVisible(true);
-                
-                produtoView.setVisible(true);
-                jPanelProdutos.updateUI();
-                
+            LinkedList produtos = null;
+        try {
+            produtos = controladorOk.retornaProdutos();
+        } catch (IOException | ClassNotFoundException ex) {
+            Logger.getLogger(LojaView.class.getName()).log(Level.SEVERE, null, ex);
+        }
+;
+            System.out.println(controladorOk);
+            if(produtos!=null){
+                for(Object o: produtos){
+                    Produto produto = (Produto) o;
+                    System.out.println(produto.toString());
+                    System.out.println(produto.getNome());
+                    ProdutoView produtoView = new ProdutoView(produto.getNome(), produto.getPreco(), controladorOk);
+
+                    jPanelProdutos.add(produtoView);
+                    jPanelProdutos.setLayout(new GridLayout(3,3));
+                    jPanelProdutos.setVisible(true);
+
+                    produtoView.setVisible(true);
+                    jPanelProdutos.updateUI(); 
+                }
             }
         //} catch (IOException | ClassNotFoundException ex) {
         //    Logger.getLogger(LojaView.class.getName()).log(Level.SEVERE, null, ex);

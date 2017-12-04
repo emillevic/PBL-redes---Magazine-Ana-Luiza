@@ -26,7 +26,9 @@ public class ViewServidor {
         int portaLoja = Console.readInt();
         
         ServidorController controlador = new ServidorController(ipMulticast, portaMulticast, ip, porta, portaLoja);
+        
         controlador.conexaoMulticast(portaMulticast);
         controlador.conexaoLoja(portaLoja);
+        
     }
 }

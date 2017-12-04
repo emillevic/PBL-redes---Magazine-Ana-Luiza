@@ -52,17 +52,9 @@ public class ServidorController {
         socket.joinGroup(group);
         outserver.writeObject("S#" + portaLoja + "#" + InetAddress.getLocalHost().getHostAddress() + "#");
         
-        while (true) {
-            DatagramPacket packet = new DatagramPacket(buf, buf.length);
-            socket.receive(packet);
-            String received = new String(
-              packet.getData(), 0, packet.getLength());
-            System.out.println(received);
-            
-            DepositoThread thread = new DepositoThread(this, socket, received);
-            Thread t1 = new Thread(thread);
-            t1.start();
-        }
+        ConexaoUdpThread udpThread = new ConexaoUdpThread(buf, socket, this);
+        Thread thread = new Thread(udpThread);
+        thread.start();
     }
     
     public void conexaoLoja(int porta) throws IOException, ClassNotFoundException{
@@ -70,6 +62,7 @@ public class ServidorController {
         System.out.println("Servidor Iniciado!");
 
         while(true){//fica esperando uma conexão
+            System.out.println("esperando...");
             Socket cliente = servidor.accept();
             LojaThread tr = new LojaThread(this, cliente);
             Thread t = new Thread(tr);

@@ -43,8 +43,6 @@ public class LojaController {
         
         outcliente.writeObject(login);
         
-        String address[] = (String[]) incliente.readObject();
-        
         return (boolean) incliente.readObject();
     }
     
@@ -52,6 +50,7 @@ public class LojaController {
         String output = "L#R#";
         outcliente.writeObject(output);
         produtos = (LinkedList) incliente.readObject();
+        System.out.println(produtos.toArray().toString());
         return produtos;
     }
     
